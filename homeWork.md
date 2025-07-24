@@ -52,4 +52,8 @@ and next() function
 -add timestamps to the user schema
 -add API level valaidation on Patch request and Signup post API
 -add API validation for each feild 
+-install validator library for valiadation 
+-use validator library function on email,passward,photourl
+-never trust req.body
+
 

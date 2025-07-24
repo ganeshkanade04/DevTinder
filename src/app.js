@@ -65,7 +65,7 @@ app.post('/signup',async(req,res)=>{
         Message:"user Created Sucessfully"
     })
     }catch(error){
-        res.status(400).send("error",error.message)
+        res.status(400).json({ error: error.message });
     }
 })
 //get all userdata from database
@@ -178,7 +178,7 @@ app.patch('/updateuser/:id',async(req,res)=>{
         //console.log(updatedUser);
     }
     catch(error){
-          res.status(404).send("something went wrong",error.message);
+          res.status(400).json({ error: error.message });
     }
 
 })
