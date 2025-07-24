@@ -60,4 +60,4 @@ and next() function
 -validate data in signup API
 -install bcrypt library
 -create passward hash using bcrypt hash and save password
-
+-create login API and comapare password throe error if email and password is not valid

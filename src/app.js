@@ -52,7 +52,7 @@ const bcrypt=require('bcrypt')
 const {validateSignupData}=require('./utils/validation');
 //create user
 app.post('/signup',async(req,res)=>{
-        console.log(req.body)
+        //console.log(req.body)
     try{
      //validate data
       validateSignupData(req);
@@ -196,6 +196,33 @@ app.patch('/updateuser/:id',async(req,res)=>{
           res.status(400).json({ error: error.message });
     }
 
+})
+
+//login API 
+app.post('/login',async(req,res)=>{
+
+    try{
+        const {emailId,password}=req.body;
+        //validate email
+        const user=await User.findOne({emailId:emailId});
+        if(!user){
+            throw new Error("Invalid Credentials");
+        }
+        const isPasswordValid=await bcrypt.compare(password,user.password);
+        if(isPasswordValid){
+            res.status(200).json({
+                message:"login successful!!",
+            })
+        }
+        else{
+            throw new Error("Invalid Credentials");
+        }
+
+    }
+    catch(error){
+        res.status(400).json({ error: error.message });
+    }
+    
 })
 
 
