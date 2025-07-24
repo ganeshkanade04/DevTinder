@@ -43,3 +43,13 @@ and next() function
 -expore the mongoose DOcumantation for model methods 
 -API-upadte user using emailId
 
+
+-explore Schematype option from the documentation 
+-add required,lowercase,unique,min,minLength,trim
+-add default
+-create custome validate function for gender 
+-improve DB Schema PuT all appropriate validation on each field in schema
+-add timestamps to the user schema
+-add API level valaidation on Patch request and Signup post API
+-add API validation for each feild 
+

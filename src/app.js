@@ -154,17 +154,28 @@ app.delete('/delete',async(req,res)=>{
 
 
 //api for update data of user
-app.patch('/updateuser',async(req,res)=>{
-    const id=req.body.id;
+app.patch('/updateuser/:id',async(req,res)=>{
+    const id=req.params?.id;//req.body.id;
     const data=req.body;
+    
     try{
+        //valiadate function to do not update email
+    const ALLOWED_UPDATES=["photourl","about","gender","age","skills"];
+    const isAllowedUpdates=Object.keys(data).every((k)=>ALLOWED_UPDATES.includes(k));
+    if(!isAllowedUpdates){
+        throw new Error("Data is not updated check field")
+    }
+    //skils is not more then 10
+    if(data?.skills.length > 10){
+        throw new Error("skills cannot be more than 10");
+    }
         const updatedUser=await User.findByIdAndUpdate({_id:id},data,{
             returnDocument:"before",
             runValidators:true
         })
         //returnDocument:"before-->it give document befour update and store update document in mongo database
         res.send(updatedUser)
-        console.log(updatedUser);
+        //console.log(updatedUser);
     }
     catch(error){
           res.status(404).send("something went wrong",error.message);
