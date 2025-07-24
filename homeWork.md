@@ -57,3 +57,7 @@ and next() function
 -never trust req.body
 
 
+-validate data in signup API
+-install bcrypt library
+-create passward hash using bcrypt hash and save password
+

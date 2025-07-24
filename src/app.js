@@ -47,9 +47,23 @@ app.use(express.json());
 //     res.send("fourth request");
 // })
 const connectDB=require('./config/database');
+const User=require('./models/user')
+const bcrypt=require('bcrypt')
+const {validateSignupData}=require('./utils/validation');
 //create user
 app.post('/signup',async(req,res)=>{
-     const user=new User(req.body
+        console.log(req.body)
+    try{
+     //validate data
+      validateSignupData(req);
+      const {firstName,lastName,emailId,password}=req.body;
+       //hashed passward
+      const hashPassword=await bcrypt.hash(password,10);
+      console.log(hashPassword);
+
+     //then store user data
+
+     const user=new User({ //req.body
         //{
     //     firstName:"Omkar",
     //     lastName:"Kanade",
@@ -57,8 +71,9 @@ app.post('/signup',async(req,res)=>{
     //     age:23,
     //     gender:"Male"
     // }
-    );//creating a new instance of the user Model 
-    try{
+      firstName,lastName,emailId,password:hashPassword
+    });//creating a new instance of the user Model 
+    
         const userData=await user.save();
           res.status(200).json({
         data:userData,
@@ -183,7 +198,7 @@ app.patch('/updateuser/:id',async(req,res)=>{
 
 })
 
-const User=require('./models/user')
+
 connectDB().then(()=>{
     console.log("database connected Successfully");
     app.listen(PORT,(req,res)=>{
