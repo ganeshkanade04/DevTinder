@@ -2,6 +2,9 @@ const express=require("express");
 const app=express();
 const PORT=3000;
 app.use(express.json());
+const cookieParser=require('cookie-parser');
+app.use(cookieParser());
+const jwt=require('jsonwebtoken');
 //this will match all the http method API calls to /test
 // app.use("/test",(req,res)=>{ 
 //      res.send("hello sever run");
@@ -49,6 +52,8 @@ app.use(express.json());
 const connectDB=require('./config/database');
 const User=require('./models/user')
 const bcrypt=require('bcrypt')
+const {userAuth}=require('./middlewares/auth')
+
 const {validateSignupData}=require('./utils/validation');
 //create user
 app.post('/signup',async(req,res)=>{
@@ -84,6 +89,7 @@ app.post('/signup',async(req,res)=>{
     }
 })
 //get all userdata from database
+
 app.get('/getuser',async(req,res)=>{
     const data=await User.find({});
     try{
@@ -99,6 +105,7 @@ app.get('/getuser',async(req,res)=>{
 
 
 //get user from database using email
+
 app.get('/getoneuser',async(req,res)=>{
     const userEmail=req.body.emailId;
     try{
@@ -155,6 +162,7 @@ app.get('/getuser/:id',async(req,res)=>{
 })
 
 //user delete api 
+
 app.delete('/delete',async(req,res)=>{
     const id=req.body.userid;
     try{
@@ -168,7 +176,9 @@ app.delete('/delete',async(req,res)=>{
 })
 
 
-//api for update data of user
+
+//api for update data of
+
 app.patch('/updateuser/:id',async(req,res)=>{
     const id=req.params?.id;//req.body.id;
     const data=req.body;
@@ -210,6 +220,12 @@ app.post('/login',async(req,res)=>{
         }
         const isPasswordValid=await bcrypt.compare(password,user.password);
         if(isPasswordValid){
+
+                //create JWT token 
+                const token=await jwt.sign({_id:user._id},"DEV@Tinder",{expiresIn:"1d"})
+                   
+                //add the token to cookie and send the response back to the user 
+                res.cookie("token",token,{expires:new Date(Date.now()+8*3600000)},{httpOnly:true})
             res.status(200).json({
                 message:"login successful!!",
             })
@@ -226,6 +242,41 @@ app.post('/login',async(req,res)=>{
 })
 
 
+//get profile API
+app.get("/profile",userAuth,async(req,res)=>{
+    try{
+    //  const cookies=req.cookies;
+      
+    //  const {token}=cookies;
+    //  if(!token){
+    //     throw new Error("Invalid Token");
+    //  }
+     //validate token 
+    //  const decodedMessage=await jwt.verify(token,"DEV@Tinder")
+    //    console.log(decodedMessage);
+    //    const {_id}=decodedMessage;
+    //    console.log("id is",_id);
+      //const userData=await User.findById(_id);
+      const userData=await req.user;
+      if(!userData){
+        throw new Error("invalid user");
+      }
+        res.send(userData);
+    
+     res.send("Reading Cookies")
+    }
+    catch(error){
+        res.status(400).json({ error: error.message });
+    }
+})
+
+//send connection request
+app.post("/sendconnectionRequest",userAuth,async(req,res)=>{
+       const user=req.user;
+    //sending a connection request
+    console.log("sending connection request");
+    res.send(user.firstName +" send connection request");
+})
 connectDB().then(()=>{
     console.log("database connected Successfully");
     app.listen(PORT,(req,res)=>{

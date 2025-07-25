@@ -61,3 +61,12 @@ and next() function
 -install bcrypt library
 -create passward hash using bcrypt hash and save password
 -create login API and comapare password throe error if email and password is not valid
+
+-install cookie parser
+-creating get profile API send cookie back
+-install jsonwebtoken
+-In login API after email and password validation ,create JWT token and sent it user
+-read the cookie inside your profile API and Find login user
+-userAuth middleware
+-add the userAuth middleware in profile API and new send connection request API
+-set expiry jwt token and cookies 7 days
