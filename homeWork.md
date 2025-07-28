@@ -70,3 +70,26 @@ and next() function
 -userAuth middleware
 -add the userAuth middleware in profile API and new send connection request API
 -set expiry jwt token and cookies 7 days
+-create userSchema method to getJWT()
+-create userSchema method to comapre Password
+
+-expore Tinder APIs
+-create list of all APIs you can think of in dev tinder 
+-Group multiple routes under respective routers
+-read documention for express.Router
+-creating routes folder for managing auth,profile,request router 
+-create authrouter,profilerouter ,requestrouter
+-import these routes in app.js 
+-create post logout API
+-create PATCH/profile/edit
+-create PATCh/profile/password API=>forget Password API
+-make you validate all data in every POST ,PATCH APIS
+
+-create connection request Schema
+-send connection request API
+-think about all corner cases
+-$or and $and read more about
+-read article compound indexes
+-read more about indexing in mongodb
+-why do we nedd indexing 
+-what is advantage and disadvantage of indexing 

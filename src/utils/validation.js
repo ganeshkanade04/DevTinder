@@ -1,5 +1,4 @@
 const validator=require('validator');
-
 const validateSignupData=(req)=>{
     const {firstName,lastName,password,emailId}=req.body;
     //fristname and lastname check
@@ -13,7 +12,23 @@ const validateSignupData=(req)=>{
         throw new Error("Please enter strong passward");
     }
 }
+const validateEditProfileData=(req)=>{
+    const allowedEditField=[
+        "firstName",
+        "lastName",
+        "photoUrl",
+        "gender",
+        "age",
+        "about",
+        "skills"
+    ];
+    const isEditAllowed=Object.keys(req.body).every((field)=>
+        allowedEditField.includes(field)
+    );
+    return isEditAllowed;
+}
 
 module.exports={
     validateSignupData,
+    validateEditProfileData
 }
