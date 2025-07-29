@@ -9,6 +9,9 @@
 -PATCH /profile/password
 
 #connectionRequestRouter
+dynamic API--POST /request/send/:status/:userId
+dynamic API--POSt /request/review/:status/:requestId
+
 -POST /request/send/intrested/:userId
 -POST /request/send/ignored/:userId
 -POSt /request/review/accepted/:requestId

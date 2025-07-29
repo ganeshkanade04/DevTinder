@@ -5,6 +5,7 @@ const authRouter = require('./auth');
 const ConnectionRequestModel=require('../models/connectionRequest');
 const User=require('../models/user')
 
+//API for ingored and intrested status
 requestRouter.post("/request/send/:status/:toUserId",userAuth,async(req,res)=>{
    try{
          const fromUserId=req.user._id;//vimp
@@ -61,6 +62,44 @@ requestRouter.post("/request/send/:status/:toUserId",userAuth,async(req,res)=>{
     
 })
 
+//API for accepted and rejected status
+requestRouter.post("/request/review/:status/:requestId",userAuth,async(req,res)=>{
+    try{
+        const loggedInUser=req.user;
+        const {status,requestId}=req.params;
+        const allowedStatus=["accepted","rejected"];
+        if(!allowedStatus.includes(status)){
+            return res.status(400).json({
+                message:"Invalid Status not allowed",
+            })
+        }
+        const connectionRequest=await ConnectionRequestModel.findOne({
+             _id:requestId,
+             toUserId:loggedInUser._id,
+             status:"intrested",
+        })
+        if(!connectionRequest){
+            return  res.status(404).json({
+                message:"Connection request not found",
+            })
+        }
+
+        connectionRequest.status=status;
+       const data=await connectionRequest.save();
+       res.json({
+        message:"Connection Request "+status,data, 
+       })
+        //validate the status
+        //Akshay=>Elon
+        //loggedInId=toUserId
+        //status=intrested
+        //requestId should be valid
+    }
+     catch(error){
+        res.status(400).json({ error: error.message });
+    }
+
+})
 //get connction request data
 requestRouter.get('/getconnctionData',userAuth,async(req,res)=>{
     try{
