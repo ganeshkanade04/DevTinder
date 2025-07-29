@@ -18,13 +18,13 @@ dynamic API--POSt /request/review/:status/:requestId
 -POST /request/review/rejected/:requestId
 
 #userRouter
+-GET /user/requests/received
 -GET /user/connection
--GET /user/requests
 -GET /user/feed gets you the profiles of other user on platfrom 
 
 Status:ignore ,intersted ,accepated,rejected 
 
-
+-find return array and findone return single object
 
 
 
